@@ -1,0 +1,50 @@
+Imports System.IO
+
+Public Class Form1
+    Private Sub btnBrowse_Click(sender As Object, e As EventArgs) Handles btnBrowse.Click
+        Using openFileDialog As New OpenFileDialog()
+            openFileDialog.Filter = "Image Files (*.bmp;*.jpg;*.jpeg;*.png)|*.bmp;*.jpg;*.jpeg;*.png"
+            If openFileDialog.ShowDialog() = DialogResult.OK Then
+                pictureBox.Image = Image.FromFile(openFileDialog.FileName)
+                pictureBox.SizeMode = PictureBoxSizeMode.StretchImage
+            End If
+        End Using
+    End Sub
+
+    Private Sub CalculateTotalFee()
+        Dim totalFee As Decimal = 0
+
+        ' Primary School Fees
+        If checkBoxPrimaryBM.Checked Then totalFee += 45
+        If checkBoxPrimaryEnglish.Checked Then totalFee += 45
+        If checkBoxPrimaryMath.Checked Then totalFee += 60
+        If checkBoxPrimaryScience.Checked Then totalFee += 55
+
+        ' Secondary School Fees
+        If checkBoxSecondaryBM.Checked Then totalFee += 50
+        If checkBoxSecondaryEnglish.Checked Then totalFee += 50
+        If checkBoxSecondaryMath.Checked Then totalFee += 65
+        If checkBoxAddMath.Checked Then totalFee += 75
+        If checkBoxPhysics.Checked Then totalFee += 75
+        If checkBoxChemistry.Checked Then totalFee += 75
+        If checkBoxBiology.Checked Then totalFee += 75
+
+        ' Apply discount if not a new student
+        If radioButtonNo.Checked Then totalFee *= 0.95D
+
+        lblTotalFee.Text = totalFee.ToString("0.00")
+    End Sub
+
+    Private Sub btnSubmit_Click(sender As Object, e As EventArgs) Handles btnSubmit.Click
+        Dim result As DialogResult = MessageBox.Show("Are you sure to register?", "Confirm Registration", MessageBoxButtons.YesNo, MessageBoxIcon.Question)
+        If result = DialogResult.Yes Then
+            CalculateTotalFee()
+            If radioButtonNo.Checked Then
+                MessageBox.Show("You get a 5% discount!", "Discount Applied", MessageBoxButtons.OK, MessageBoxIcon.Information)
+            End If
+            MessageBox.Show("Registration submitted successfully!", "Registration", MessageBoxButtons.OK, MessageBoxIcon.Information)
+        Else
+            MessageBox.Show("Registration cancelled.", "Cancelled", MessageBoxButtons.OK, MessageBoxIcon.Information)
+        End If
+    End Sub
+End Class
